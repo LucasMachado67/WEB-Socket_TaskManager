@@ -2,6 +2,7 @@ package com.manager.service;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
+import oshi.hardware.HWDiskStore;
 import oshi.hardware.HardwareAbstractionLayer;
 
 @Service
@@ -21,6 +23,7 @@ public class SystemMonitorService {
     //Obtem as informações do processador
     private final CentralProcessor processor = hal.getProcessor();
     private long[] prevTicks = processor.getSystemCpuLoadTicks();
+    private final List<HWDiskStore> disk = hal.getDiskStores();
 
     //método para pegar as informações do computador
     public Map<String, Object> getSystemsStats() {
@@ -52,9 +55,15 @@ public class SystemMonitorService {
         DecimalFormat df = new DecimalFormat("#.00");
 
         //Adicionando no mapa
+        
         stats.put("cpuload", df.format(cpuload));
         stats.put("totalMemory", df.format(memoryConverted));
+        stats.put("memoryInUse", df.format(memoryConverted - memoryAvailableConverted));
         stats.put("availableMemory", df.format(memoryAvailableConverted));
+        //Adicionando os valores do Disk
+        stats.put("Disk Name", disk.get(0).getName());
+        stats.put("Disk model", disk.get(0).getModel());
+        stats.put("Disk Size(Bytes)", disk.get(0).getSize() / 1024 / 1024 / 1024);
 
         return stats;
     }

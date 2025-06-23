@@ -27,7 +27,12 @@ public class SystemMonitorController {
         System.out.println(stats);
         System.out.println("CPU LOAD: " + stats.get("cpuload") + "%");
         System.out.println("Memory: " + stats.get("totalMemory"));
+        System.out.println("Memory in use: " + stats.get("memoryInUse"));
         System.out.println("Available Memory: " + stats.get("availableMemory"));
-
+        System.out.println("Disk Storage Name: " + stats.get("Disk Name"));
+        System.out.println("Disk Storage Model: " + stats.get("Disk model"));
+        System.out.println("Disk Storage Size: " + stats.get("Disk Size(Bytes)"));
     }
+
+
 }
