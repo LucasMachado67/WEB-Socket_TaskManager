@@ -31,7 +31,6 @@ public class SystemMonitorService {
         //Mapa para armazenar as estatísticas 
         Map<String, Object> stats = new HashMap<>();
 
-
         //Necessário poís a CPU precisa de dois pontos de tempo para medir
         try{
             //Espera um pequeno intervalo

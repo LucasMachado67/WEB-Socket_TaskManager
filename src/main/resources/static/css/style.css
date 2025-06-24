@@ -1,0 +1,17 @@
+
+*{
+    background-color: rgb(175, 175, 197);
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    align-items: center;
+    flex-direction: column;
+}
+
+h1{
+    color: black;
+    font-weight: bold;
+}
