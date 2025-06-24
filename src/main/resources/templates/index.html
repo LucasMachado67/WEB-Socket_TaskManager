@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js" ></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <title>Task Manager</title>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Task manager</h1>
+        
+        <strong>CPU Load: </strong><span id="cpuLoad" th:text="${cpuload}">--</span><br>
+        <strong>Memória Total: </strong><span id="memory" th:text="${memory}">--</span><br>
+        <strong>Memória em Uso: </strong><span id="memoryInUse" th:text="${memoryInUse}">--</span><br>
+        <strong>Memória Disponível: </strong><span id="memoryAvailable" th:text="${memoryAvailable}">--</span><br>
+        <strong>Nome do Disco</strong><span id="diskName" th:text="${diskStorageName}">--</span><br>
+        <strong>Modelo do Disco</strong><span id="diskModel" th:text="${diskStorageModel}">--</span><br>
+        <strong>Tamanho do Disco </strong><span id="diskSize" th:text="${diskStorageSize}">--</span><br>
+
+    </div>
+
+     <script>
+        const socket = new SockJS('/ws');
+        const stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, () => {
+            stompClient.subscribe('/topic/system-stats', (message) => {
+                const stats = JSON.parse(message.body);
+
+                document.getElementById("cpuLoad").innerText = stats.cpuload + "%";
+                document.getElementById("memory").innerText = stats.totalMemory;
+                document.getElementById("memoryInUse").innerText = stats.memoryInUse;
+                document.getElementById("memoryAvailable").innerText = stats.availableMemory;
+                document.getElementById("diskName").innerText = stats["Disk Name"];
+                document.getElementById("diskModel").innerText = stats["Disk model"];
+                document.getElementById("diskSize").innerText = stats["Disk Size(Bytes)"];
+            });
+        });
+        console.log("Conectado ao WebSocket!");
+    </script>
+</body>
+</html>
